@@ -49,8 +49,9 @@ export default function Reservas() {
 
   return (
     <div className="min-h-screen bg-[#e7ebd3] p-4">
-      <h2 className="text-center text-xl font-bold mb-4 text-white">RESERVAS</h2>
+      <h2 className="text-center text-xl font-bold mb-4">RESERVAS</h2>
 
+      {/* Botones */}
       <div className="flex justify-center mb-6 gap-2">
         <button
           onClick={() => setTipo("futbol")}
@@ -70,6 +71,7 @@ export default function Reservas() {
         </button>
       </div>
 
+      {/* Tabla */}
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-400 text-white">
           <thead className="bg-[#6b5cc4] text-sm">
@@ -83,34 +85,32 @@ export default function Reservas() {
           <tbody>
             {HORARIOS.map((hora) => {
               const reserva = getReserva(hora);
-              const terminada = esHoraPasada(hora);
+              const terminada = esHoraPasada(hora) && reserva;
 
               return (
                 <tr key={hora} className="bg-[#7c76a5] text-center">
                   <td className="border p-2">{reserva?.nombre || ""}</td>
                   <td className="border p-2">{hora}</td>
 
+                  {/* RESERVADO / TERMINADO */}
                   <td className="border p-2">
-                    {reserva ? (
-                      terminada ? (
-                        <span className="bg-gray-400 px-2 py-1 rounded text-white text-xs">
-                          TERMINADO
-                        </span>
-                      ) : (
-                        <span className="bg-blue-500 px-2 py-1 rounded text-white text-xs">
-                          RESERVADO
-                        </span>
-                      )
+                    {terminada ? (
+                      <span className="bg-gray-400 px-2 py-1 rounded text-white text-xs">
+                        TERMINADO
+                      </span>
+                    ) : reserva ? (
+                      <span className="bg-blue-500 px-2 py-1 rounded text-white text-xs">
+                        RESERVADO
+                      </span>
                     ) : (
                       ""
                     )}
                   </td>
 
+                  {/* PAGO + BOTONES */}
                   <td className="border p-2">
                     {reserva?.estado === "pagototal" && (
-                      <div className="bg-green-400 text-white font-bold rounded py-1">
-                        PAGO
-                      </div>
+                      <div className="bg-green-400 text-white font-bold rounded py-1">PAGO</div>
                     )}
 
                     {reserva?.estado === "seña" && (
@@ -122,14 +122,16 @@ export default function Reservas() {
                         >
                           Pago total
                         </button>
-
-                        <button
-                          onClick={() => anularReserva(reserva._id)}
-                          className="mt-1 text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 block w-full"
-                        >
-                          Anular
-                        </button>
                       </div>
+                    )}
+
+                    {reserva && (
+                      <button
+                        onClick={() => anularReserva(reserva._id)}
+                        className="mt-1 text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 block w-full"
+                      >
+                        Anular
+                      </button>
                     )}
                   </td>
                 </tr>

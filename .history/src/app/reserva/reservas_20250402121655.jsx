@@ -49,8 +49,9 @@ export default function Reservas() {
 
   return (
     <div className="min-h-screen bg-[#e7ebd3] p-4">
-      <h2 className="text-center text-xl font-bold mb-4 text-white">RESERVAS</h2>
+      <h2 className="text-center text-xl font-bold mb-4">RESERVAS</h2>
 
+      {/* Botones */}
       <div className="flex justify-center mb-6 gap-2">
         <button
           onClick={() => setTipo("futbol")}
@@ -70,6 +71,7 @@ export default function Reservas() {
         </button>
       </div>
 
+      {/* Tabla */}
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-400 text-white">
           <thead className="bg-[#6b5cc4] text-sm">
@@ -81,61 +83,53 @@ export default function Reservas() {
             </tr>
           </thead>
           <tbody>
-            {HORARIOS.map((hora) => {
-              const reserva = getReserva(hora);
-              const terminada = esHoraPasada(hora);
+  {reservas
+    .filter((r) => r.estado === "seña") // ← Mostrar solo los que tienen estado "seña"
+    .sort((a, b) => parseInt(a.hora) - parseInt(b.hora)) // orden por hora
+    .map((reserva) => {
+      const horaNum = parseInt(reserva.hora.split(":")[0]);
+      const terminada = horaNum < horaActual;
 
-              return (
-                <tr key={hora} className="bg-[#7c76a5] text-center">
-                  <td className="border p-2">{reserva?.nombre || ""}</td>
-                  <td className="border p-2">{hora}</td>
+      return (
+        <tr key={reserva._id} className="bg-[#7c76a5] text-center">
+          <td className="border p-2">{reserva.nombre}</td>
+          <td className="border p-2">{reserva.hora}</td>
 
-                  <td className="border p-2">
-                    {reserva ? (
-                      terminada ? (
-                        <span className="bg-gray-400 px-2 py-1 rounded text-white text-xs">
-                          TERMINADO
-                        </span>
-                      ) : (
-                        <span className="bg-blue-500 px-2 py-1 rounded text-white text-xs">
-                          RESERVADO
-                        </span>
-                      )
-                    ) : (
-                      ""
-                    )}
-                  </td>
+          <td className="border p-2">
+            {terminada ? (
+              <span className="bg-gray-400 px-2 py-1 rounded text-white text-xs">
+                TERMINADO
+              </span>
+            ) : (
+              <span className="bg-blue-500 px-2 py-1 rounded text-white text-xs">
+                RESERVADO
+              </span>
+            )}
+          </td>
 
-                  <td className="border p-2">
-                    {reserva?.estado === "pagototal" && (
-                      <div className="bg-green-400 text-white font-bold rounded py-1">
-                        PAGO
-                      </div>
-                    )}
+          <td className="border p-2">
+            <div className="bg-yellow-300 text-black font-bold rounded p-1">
+              ${reserva.pago}
+              <button
+                onClick={() => marcarPagoTotal(reserva._id)}
+                className="mt-1 text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 block w-full"
+              >
+                Pago total
+              </button>
+            </div>
 
-                    {reserva?.estado === "seña" && (
-                      <div className="bg-yellow-300 text-black font-bold rounded p-1">
-                        ${reserva.pago}
-                        <button
-                          onClick={() => marcarPagoTotal(reserva._id)}
-                          className="mt-1 text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 block w-full"
-                        >
-                          Pago total
-                        </button>
+            <button
+              onClick={() => anularReserva(reserva._id)}
+              className="mt-1 text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 block w-full"
+            >
+              Anular
+            </button>
+          </td>
+        </tr>
+      );
+    })}
+</tbody>
 
-                        <button
-                          onClick={() => anularReserva(reserva._id)}
-                          className="mt-1 text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 block w-full"
-                        >
-                          Anular
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
         </table>
       </div>
     </div>
