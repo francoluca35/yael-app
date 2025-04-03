@@ -1,57 +1,74 @@
 "use client";
-import { useState } from "react";
-import useReservas from "@/hooks/useReservas";
+import { useEffect, useState } from "react";
 
 const HORARIOS = Array.from({ length: 14 }, (_, i) => `${10 + i}:00`);
-const hoy = new Date().toISOString().slice(0, 10);
 
 export default function Reservas() {
   const [tipo, setTipo] = useState("futbol");
-  const [fecha, setFecha] = useState(hoy);
-
-  const { reservas, marcarPagoTotal } = useReservas(tipo, fecha);
+  const [reservas, setReservas] = useState([]);
+  const fechaHoy = new Date().toISOString().slice(0, 10);
   const horaActual = new Date().getHours();
+
+  useEffect(() => {
+    fetchReservas();
+  }, [tipo]);
+
+  const fetchReservas = async () => {
+    const res = await fetch(`/api/reservas?fecha=${fechaHoy}&tipo=${tipo}`);
+    const data = await res.json();
+    setReservas(data);
+  };
 
   const getReserva = (hora) => reservas.find((r) => r.hora === hora);
 
+  const marcarPagoTotal = async (id) => {
+    await fetch(`/api/reservas`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    fetchReservas();
+  };
+
+  const anularReserva = async (id) => {
+    const confirm = window.confirm("¿Seguro que querés anular esta reserva?");
+    if (!confirm) return;
+
+    await fetch(`/api/reservas`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    fetchReservas();
+  };
+
   const esHoraPasada = (hora) => {
     const horaNum = parseInt(hora.split(":")[0]);
-    const esHoy = fecha === hoy;
-    return esHoy && horaNum < horaActual;
+    return horaNum < horaActual;
   };
 
   return (
     <div className="min-h-screen bg-[#e7ebd3] p-4">
       <h2 className="text-center text-xl font-bold mb-4">RESERVAS</h2>
 
-      {/* Botones y Calendario */}
-      <div className="flex flex-col md:flex-row justify-center mb-6 gap-4 items-center">
-        <div className="flex gap-2">
-          <button
-            onClick={() => setTipo("futbol")}
-            className={`px-4 py-2 rounded-l-xl font-bold ${
-              tipo === "futbol" ? "bg-[#9b1978] text-white" : "bg-gray-300"
-            }`}
-          >
-            FUTBOL
-          </button>
-          <button
-            onClick={() => setTipo("padel")}
-            className={`px-4 py-2 rounded-r-xl font-bold ${
-              tipo === "padel" ? "bg-[#6b5cc4] text-white" : "bg-gray-300"
-            }`}
-          >
-            PADEL
-          </button>
-        </div>
-
-        <input
-          type="date"
-          value={fecha}
-          onChange={(e) => setFecha(e.target.value)}
-          className="border px-4 py-2 rounded text-black"
-          max="9999-12-31"
-        />
+      {/* Botones */}
+      <div className="flex justify-center mb-6 gap-2">
+        <button
+          onClick={() => setTipo("futbol")}
+          className={`px-4 py-2 rounded-l-xl font-bold ${
+            tipo === "futbol" ? "bg-[#9b1978] text-white" : "bg-gray-300"
+          }`}
+        >
+          FUTBOL
+        </button>
+        <button
+          onClick={() => setTipo("padel")}
+          className={`px-4 py-2 rounded-r-xl font-bold ${
+            tipo === "padel" ? "bg-[#6b5cc4] text-white" : "bg-gray-300"
+          }`}
+        >
+          PADEL
+        </button>
       </div>
 
       {/* Tabla */}
@@ -90,13 +107,12 @@ export default function Reservas() {
                     )}
                   </td>
 
-                  {/* PAGO */}
+                  {/* PAGO + BOTONES */}
                   <td className="border p-2">
                     {reserva?.estado === "pagototal" && (
-                      <div className="bg-green-400 text-white font-bold rounded py-1">
-                        PAGO
-                      </div>
+                      <div className="bg-green-400 text-white font-bold rounded py-1">PAGO</div>
                     )}
+
                     {reserva?.estado === "seña" && (
                       <div className="bg-yellow-300 text-black font-bold rounded p-1">
                         ${reserva.pago}
@@ -108,6 +124,15 @@ export default function Reservas() {
                         </button>
                       </div>
                     )}
+
+                    {reserva && (
+                      <button
+                        onClick={() => anularReserva(reserva._id)}
+                        className="mt-1 text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 block w-full"
+                      >
+                        Anular
+                      </button>
+                    )}
                   </td>
                 </tr>
               );
@@ -118,4 +143,3 @@ export default function Reservas() {
     </div>
   );
 }
-
