@@ -1,5 +1,5 @@
 import React from 'react'
-import Reservas from './reservas'
+import Reservas from '../components/reservas'
 
 function reserva() {
   return (
