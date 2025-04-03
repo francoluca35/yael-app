@@ -47,7 +47,7 @@ export default function AdminAuth() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-2 rounded bg-white text-white outline-none"
+              className="w-full p-2 rounded bg-white text-black outline-none"
               required
             />
           </div>
@@ -58,7 +58,7 @@ export default function AdminAuth() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 rounded bg-white text-white outline-none"
+              className="w-full p-2 rounded bg-white text-black outline-none"
               required
             />
           </div>
