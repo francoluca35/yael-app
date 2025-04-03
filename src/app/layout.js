@@ -3,15 +3,17 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// src/app/layout.js
+// app/layout.js
 export const metadata = {
-  title: 'Yael app',
-  description: 'App web instalable con Next.js + PWA',
-  themeColor: '#1111',
+  title: "Yael App",
+  description: "Sistema de reservas de canchas",
+  manifest: "/manifest.json",
   icons: {
-    icon: '/favicon.ico',
+    icon: "/icons/icon.png",
+    apple: "/icons/icon.png",
   },
-}
+};
+
 
 
 export default function RootLayout({ children }) {
