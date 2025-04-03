@@ -7,7 +7,7 @@ export async function POST(req) {
     const client = await clientPromise;
     const db = client.db("yael");
 
-    const user = await db.collection("users").findOne({ usuario });
+    const user = await db.collection("users").findOne({ username: usuario }); // CAMBIO: field correcto
 
     if (!user || user.password !== password) {
       return new Response(JSON.stringify({ error: "Usuario o contraseña incorrectos" }), {
@@ -16,10 +16,18 @@ export async function POST(req) {
       });
     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        username: user.username,
+        role: user.role,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
     console.error("Error en login:", error);
     return new Response(JSON.stringify({ error: "Error interno del servidor" }), {

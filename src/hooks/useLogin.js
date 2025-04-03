@@ -21,7 +21,7 @@ export default function useLogin() {
         throw new Error(data.error || "Error al iniciar sesión");
       }
 
-      return data; // Retorna el usuario autenticado
+      return data; 
     } catch (err) {
       setError(err.message);
       return null;
