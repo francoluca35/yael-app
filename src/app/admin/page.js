@@ -1,76 +1,65 @@
 "use client";
-
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import useLogin from "../../hooks/useLogin.js";
+import { useEffect, useState } from "react";
+import { CalendarCheck, DollarSign, Library, Gift, Power } from "lucide-react";
 
-export default function AdminAuth() {
+export default function Home() {
   const router = useRouter();
-  const { login, loading, error } = useLogin();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [authError, setAuthError] = useState(null);
+  const [dateTime, setDateTime] = useState("");
 
-  const handleAuth = async (e) => {
-    e.preventDefault();
-    setAuthError(null);
+  useEffect(() => {
+    const now = new Date();
+    const fecha = now.toLocaleDateString("es-AR");
+    const hora = now.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+    setDateTime(`${fecha} ${hora}`);
+  }, []);
 
-    if (loading) return;
-
-    const validUser = await login(username, password);
-
-    if (validUser) {
-      localStorage.setItem("adminUser", JSON.stringify(validUser));
-      router.push("/home");
-    } else {
-      setAuthError("Usuario o contraseña incorrectos.");
-    }
-  };
+  const buttons = [
+    { label: "Reserva", route: "/reserva", icon: <CalendarCheck size={32} /> },
+    { label: "Precios", route: "/precios", icon: <DollarSign size={32} /> },
+    { label: "Historial", route: "/historial", icon: <Library size={32} /> },
+    { label: "Promos", route: "/promos", icon: <Gift size={32} /> },
+  ];
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex justify-center items-center"
-      style={{ backgroundImage: "url('/Assets/admin.jpg')" }} 
+      className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-start p-4"
+      style={{ backgroundImage: "url('/Assets/admin.jpg')" }} // Reemplazá con tu imagen real
     >
-      <div className="bg-[#0e122b]/60 p-8 rounded-xl w-80 flex flex-col items-center shadow-lg backdrop-blur-sm">
-        <img src="/Assets/yael.png" alt="Rapiflex Logo" className="w-32 mb-4 rounded-full object-cover" /> {/* Reemplazá con tu logo */}
-        <h2 className="text-xl font-bold text-white mb-6">Iniciar Sesion</h2>
-
-        {(authError || error) && (
-          <p className="text-red-600 text-sm mb-2 text-center">{authError || error}</p>
-        )}
-
-        <form onSubmit={handleAuth} className="w-full flex flex-col gap-4">
-          <div>
-            <label className="text-white text-sm">Usuario</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-2 rounded bg-white text-black outline-none"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-white text-sm">Contraseña</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 rounded bg-white text-black outline-none"
-              required
-            />
-          </div>
-
+      <div className="w-full flex justify-between items-center mb-6 bg-white/80 p-2 rounded shadow">
+        <span className="font-semibold text-black">{dateTime}</span>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-black">club yael (admin)</span>
           <button
-            type="submit"
-            className="bg-[#273174] text-white py-2 rounded hover:bg-[#3d478a] transition"
-            disabled={loading}
+            onClick={() => {
+              localStorage.removeItem("adminUser");
+              router.push("/");
+            }}
+            className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition"
+            title="Cerrar sesión"
           >
-            {loading ? "Cargando..." : "ENTRAR"}
+            <Power size={16} className="text-white" />
           </button>
-        </form>
+        </div>
+      </div>
+
+      <img
+        src="/Assets/yael.png"
+        alt="Club Yael Logo"
+        className="w-32 h-32 rounded-full object-cover mb-8 shadow-md"
+      />
+
+      <div className="grid grid-cols-2 gap-6 bg-transparent p-4 rounded-lg ">
+        {buttons.map((btn) => (
+          <button
+            key={btn.label}
+            onClick={() => router.push(btn.route)}
+            className="w-28 h-28 rounded-xl bg-[#0e122b] text-white font-semibold shadow-lg hover:scale-105 transition flex flex-col items-center justify-center gap-2"
+          >
+            {btn.icon}
+            <span>{btn.label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );
