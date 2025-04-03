@@ -7,7 +7,12 @@ const withPWA = require('next-pwa')({
   module.exports = withPWA({
     reactStrictMode: true,
     experimental: {
-      appDir: true, // porque estás usando `src/app`
+      appDir: true, 
     },
   })
-  
+
+  const nextConfig = {
+    reactStrictMode: true,
+    // Otras configs que tengas
+  };
+  module.exports = withPWA(nextConfig);
