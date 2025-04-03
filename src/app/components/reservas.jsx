@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import useReservas from "@/hooks/useReservas";
+import BackButton from "./BackButton";
 
 const HORARIOS = Array.from({ length: 14 }, (_, i) => `${10 + i}:00`);
 const hoy = new Date().toISOString().slice(0, 10);
@@ -22,15 +23,22 @@ export default function Reservas() {
 
   return (
     <div className="min-h-screen bg-[#e7ebd3] p-4">
-      <h2 className="text-center text-xl font-bold mb-4">RESERVAS</h2>
+<div className="relative mb-6 py-2">
 
-      {/* Botones y Calendario */}
+  <div className="absolute left-0 top-1/2 -translate-y-1/2">
+    <BackButton />
+  </div>
+
+
+  <h2 className="text-center text-xl font-bold text-black">RESERVAS</h2>
+</div>
+
       <div className="flex flex-col md:flex-row justify-center mb-6 gap-4 items-center">
         <div className="flex gap-2">
           <button
             onClick={() => setTipo("futbol")}
             className={`px-4 py-2 rounded-l-xl font-bold ${
-              tipo === "futbol" ? "bg-[#9b1978] text-white" : "bg-gray-300"
+              tipo === "futbol" ? "bg-[#5c6cc4] text-white" : "bg-gray-300 text-black"
             }`}
           >
             FUTBOL
@@ -38,7 +46,7 @@ export default function Reservas() {
           <button
             onClick={() => setTipo("padel")}
             className={`px-4 py-2 rounded-r-xl font-bold ${
-              tipo === "padel" ? "bg-[#6b5cc4] text-white" : "bg-gray-300"
+              tipo === "padel" ? "bg-[#5c6cc4] text-white" : "bg-gray-300 text-black"
             }`}
           >
             PADEL
@@ -57,7 +65,7 @@ export default function Reservas() {
       {/* Tabla */}
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-400 text-white">
-          <thead className="bg-[#6b5cc4] text-sm">
+          <thead className="bg-[#0e122b] text-sm">
             <tr>
               <th className="p-2 border">NOMBRE</th>
               <th className="p-2 border">HORARIO</th>
@@ -71,7 +79,7 @@ export default function Reservas() {
               const terminada = esHoraPasada(hora) && reserva;
 
               return (
-                <tr key={hora} className="bg-[#7c76a5] text-center">
+                <tr key={hora} className="bg-[#212a63] text-center">
                   <td className="border p-2">{reserva?.nombre || ""}</td>
                   <td className="border p-2">{hora}</td>
 
