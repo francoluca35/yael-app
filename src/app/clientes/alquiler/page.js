@@ -1,9 +1,10 @@
 import React from 'react'
+import ReservaCancha from '../components/ReservarCancha'
 
 function alquiler() {
   return (
     <div>
-      <h1>esta es la app para reservar</h1>
+    <ReservaCancha />
     </div>
   )
 }
