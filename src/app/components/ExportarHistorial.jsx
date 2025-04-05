@@ -1,6 +1,6 @@
 "use client";
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import autoTable from 'jspdf-autotable';
 import * as XLSX from "xlsx";
 
 export default function ExportarHistorial({ data, desde, hasta }) {
@@ -25,7 +25,7 @@ export default function ExportarHistorial({ data, desde, hasta }) {
       item.tipo,
     ]);
 
-    doc.autoTable({
+    autoTable(doc, {
       head: [["Nombre", "Teléfono", "Fecha", "Hora", "Tipo"]],
       body: filas,
       startY: 35,
@@ -44,6 +44,7 @@ export default function ExportarHistorial({ data, desde, hasta }) {
         }
       },
     });
+    
 
     doc.save(`semana-completa-${desde}_a_${hasta}.pdf`);
   };
