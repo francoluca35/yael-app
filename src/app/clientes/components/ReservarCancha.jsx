@@ -37,7 +37,7 @@ export default function ReservaHorarios() {
         </div>
 
         <h2 className="text-center font-bold mb-4 text-xl text-white">
-          Reservar {tipo.toUpperCase()}
+          Reservar cancha de {tipo.toUpperCase()}
         </h2>
 
         <div className="flex justify-center gap-2 mb-4">
@@ -49,7 +49,7 @@ export default function ReservaHorarios() {
           </button>
           <button
             onClick={() => setTipo('padel')}
-            className={`px-4 py-2 rounded-full font-bold ${tipo === 'padel' ? 'bg-blue-600 text-white' : 'bg-gray-500 border'}`}
+            className={`px-4 py-2 rounded-full font-bold ${tipo === 'padel' ? 'bg-gray-800 text-white' : 'bg-gray-500 border'}`}
           >
             PADEL
           </button>
@@ -57,14 +57,14 @@ export default function ReservaHorarios() {
 
         <input
           type="date"
-          className="w-full border p-2 rounded mb-4 text-black"
+          className="w-full border p-2 rounded mb-4 text-white bg-gray-500/80"
           value={fecha}
           onChange={(e) => setFecha(e.target.value)}
         />
 
         <button
           onClick={buscarHorarios}
-          className="w-full bg-black text-white py-2 rounded mb-4"
+          className="w-full bg-[#0e122b] hover:bg-[#0e124a] text-white py-2 rounded mb-4"
         >
           SIGUIENTE
         </button>

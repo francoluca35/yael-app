@@ -34,25 +34,48 @@ export default function SelectorHorario() {
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 p-4">
-      <div className="bg-white rounded shadow p-4 max-w-md w-full">
-        <div className="text-center mb-4">
-          <Image src="/Assets/yael.png" alt="Yael" width={100} height={100} />
+    <div className="min-h-screen flex justify-center items-center bg-[#0e122b] px-4 py-8">
+      <div className="bg-gray-300 rounded-xl shadow-xl p-6 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
+        <div className="flex justify-center mb-6">
+          <Image
+            src="/Assets/yael.png"
+            alt="Yael"
+            width={100}
+            height={100}
+            className="rounded-full border-2 border-gray-300 shadow"
+          />
         </div>
-        <h2 className="text-center font-bold mb-2">Seleccionar horario</h2>
-        {HORAS.map((hora) => (
-          <button
-            key={hora}
-            onClick={() => handleSeleccion(hora)}
-            className={`w-full mb-2 p-2 rounded ${horariosOcupados.includes(hora) ? 'bg-red-400' : 'bg-blue-600 text-white'}`}
-            disabled={horariosOcupados.includes(hora)}
-          >
-            {hora}
-          </button>
-        ))}
+
+        <h2 className="text-center font-bold text-xl mb-4">Seleccionar horario</h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {HORAS.map((hora) => {
+            const isOcupado = horariosOcupados.includes(hora)
+            const isSeleccionado = horarioSeleccionado === hora
+
+            return (
+              <button
+                key={hora}
+                onClick={() => handleSeleccion(hora)}
+                className={`p-2 rounded text-sm sm:text-base transition-all duration-300
+                  ${
+                    isOcupado
+                      ? 'bg-red-400 cursor-not-allowed text-white'
+                      : isSeleccionado
+                      ? 'bg-green-500 hover:bg-green-600 text-white'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  }`}
+                disabled={isOcupado}
+              >
+                {hora}
+              </button>
+            )
+          })}
+        </div>
+
         <button
           onClick={handleSiguiente}
-          className="bg-black text-white w-full p-2 rounded mt-2"
+          className="bg-black text-white w-full p-3 rounded mt-6 text-lg hover:bg-gray-800 transition-all duration-300"
         >
           Siguiente
         </button>
