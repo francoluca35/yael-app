@@ -10,7 +10,10 @@ export default function Home() {
   useEffect(() => {
     const now = new Date();
     const fecha = now.toLocaleDateString("es-AR");
-    const hora = now.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+    const hora = now.toLocaleTimeString("es-AR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     setDateTime(`${fecha} ${hora}`);
   }, []);
 
@@ -18,7 +21,7 @@ export default function Home() {
     { label: "Reserva", route: "/reserva", icon: <CalendarCheck size={32} /> },
     { label: "Precios", route: "/precios", icon: <DollarSign size={32} /> },
     { label: "Historial", route: "/historial", icon: <Library size={32} /> },
-    { label: "Promos", route: "/promos", icon: <Gift size={32} /> },
+    { label: "Promos", route: "/torneo-admin", icon: <Gift size={32} /> },
   ];
 
   return (
