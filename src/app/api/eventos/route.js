@@ -23,6 +23,18 @@ export async function GET() {
     await client.close();
   }
 }
+export async function getEventos() {
+  try {
+    const res = await fetch("/api/eventos"); // llamada al API route
+    if (!res.ok) {
+      throw new Error("Error al obtener eventos");
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error en getEventos:", error);
+    return [];
+  }
+}
 
 export async function POST(request) {
   try {

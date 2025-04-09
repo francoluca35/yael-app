@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import BackButton from "../components/BackButton";
 
-const FormTorneoFutbol = lazy(() => import("./components/FormTorneoFutbol"));
+const FormTorneoPadel = lazy(() => import("./components/FormTorneoPadel"));
 
 function TorneoDeFutbol() {
   return (
@@ -14,7 +14,7 @@ function TorneoDeFutbol() {
           <p className="text-center text-gray-700">Cargando formulario...</p>
         }
       >
-        <FormTorneoFutbol />
+        <FormTorneoPadel />
       </Suspense>
     </div>
   );

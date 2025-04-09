@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useEventosYael } from "@/hooks/useEventosYael";
 import { useSearchParams } from "next/navigation";
 
-export default function FormTorneoFutbol() {
+export default function FiestaForm() {
   const [precioHora, setPrecioHora] = useState(0);
   const [precioOriginal, setPrecioOriginal] = useState(0);
   const [descuentoAplicado, setDescuentoAplicado] = useState(false);
@@ -14,24 +14,25 @@ export default function FormTorneoFutbol() {
     hasta: "",
     equipos: "",
     nombre: "",
+    nacimiento: "",
     precio: "",
   });
 
   const searchParams = useSearchParams();
-  const tipoEvento = searchParams.get("tipo") || "futbol";
+  const tipoEvento = searchParams.get("tipo") || "cumpleaños";
 
   const { eventos, loading } = useEventosYael();
 
   const getDiaSemana = (fechaStr) => {
     if (!fechaStr) return "";
     const dias = [
+      "Domingo",
       "Lunes",
       "Martes",
       "Miércoles",
       "Jueves",
       "Viernes",
       "Sábado",
-      "Domingo",
     ];
     const fecha = new Date(fechaStr);
     return dias[fecha.getDay()];
@@ -83,8 +84,8 @@ export default function FormTorneoFutbol() {
       const diaSemana = getDiaSemana(form.dia);
       const clavePrecio = normalizarDia(diaSemana);
 
-      if (clavePrecio === "Sabado") {
-        total *= 0.8;
+      if (clavePrecio === "Sabado" || clavePrecio === "Domingo") {
+        total *= 0.9;
         descuento = true;
       }
 
@@ -108,7 +109,7 @@ export default function FormTorneoFutbol() {
       hora: `${form.desde} - ${form.hasta}`,
       pago: form.precio,
       descuento: descuentoAplicado,
-      precioOriginal: precioOriginal,
+      precioOriginal,
     };
 
     fetch("/api/reserved", {
@@ -125,79 +126,60 @@ export default function FormTorneoFutbol() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0e0d8] to-[#d0d0f0] px-4">
-      <div className="w-full max-w-md space-y-6 p-6 bg-white shadow-xl rounded-2xl">
-        <div className="bg-[#2f3f6b] text-white p-4 rounded-xl flex items-center space-x-4">
-          <div className="bg-white text-[#2f3f6b] rounded-full p-3 text-xl">
-            ⚽
-          </div>
-          <div className="text-left">
-            <p className="font-semibold text-lg">Torneo de {tipoEvento}</p>
-            <p className="text-sm">20% Descuento - Sábados</p>
-            <p className="text-sm">Viernes, Sábado, Domingo</p>
-          </div>
+    <div className="space-y-4">
+      {[
+        { label: "FECHA DEL CUMPLEAÑOS", name: "dia", type: "date" },
+        { label: "DESDE", name: "desde", type: "time" },
+        { label: "HASTA", name: "hasta", type: "time" },
+        { label: "NOMBRE COMPLETO", name: "nombre", type: "text" },
+        { label: "FECHA DE NACIMIENTO", name: "nacimiento", type: "date" },
+      ].map(({ label, name, type }) => (
+        <div key={name}>
+          <label className="block text-sm text-gray-700 mb-1">{label}</label>
+          <input
+            type={type}
+            name={name}
+            value={form[name]}
+            onChange={handleChange}
+            className="w-full p-2 rounded-lg border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5e4b9c]"
+            min={
+              type === "date"
+                ? new Date().toISOString().split("T")[0]
+                : undefined
+            }
+          />
         </div>
+      ))}
 
-        <div className="space-y-4">
-          {[
-            { label: "DÍA DEL TORNEO", name: "dia", type: "date" },
-            { label: "DESDE", name: "desde", type: "time" },
-            { label: "HASTA", name: "hasta", type: "time" },
-            { label: "CANTIDAD DE EQUIPOS", name: "equipos", type: "number" },
-            { label: "NOMBRE DEL TORNEO", name: "nombre", type: "text" },
-          ].map(({ label, name, type }) => (
-            <div key={name}>
-              <label className="block text-sm text-gray-700 mb-1">
-                {label}
-              </label>
-              <input
-                type={type}
-                name={name}
-                value={form[name]}
-                onChange={handleChange}
-                className="w-full p-2 rounded-lg border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5e4b9c] transition"
-                min={
-                  type === "date"
-                    ? new Date().toISOString().split("T")[0]
-                    : undefined
-                }
-              />
-            </div>
-          ))}
-
-          <div>
-            <label className="block text-sm text-gray-700 mb-1">
-              PRECIO TOTAL
-            </label>
-            <div className="bg-[#2f3f6b] text-white w-full p-3 rounded-lg text-lg font-semibold">
-              {form.precio
-                ? `$${Number(form.precio).toLocaleString("es-AR")}`
-                : "$0.00"}
-            </div>
-          </div>
-
-          <div className="text-sm text-gray-600">
-            Precio por hora: ${precioOriginal.toLocaleString("es-AR")}
-          </div>
-
-          {descuentoAplicado && (
-            <div className="text-green-600 font-medium text-sm mt-1">
-              🎉 Se aplicó un 20% de descuento por ser sábado
-            </div>
-          )}
-
-          <p className="text-xs text-gray-500">
-            El precio se calcula automáticamente según el día y horario.
-          </p>
-
-          <button
-            onClick={handleSubmit}
-            className="w-full py-3 rounded-full bg-[#5e4b9c] text-white font-semibold hover:bg-[#4a3b86] transition-all"
-          >
-            IR A PAGAR
-          </button>
+      <div>
+        <label className="block text-sm text-gray-700 mb-1">PRECIO TOTAL</label>
+        <div className="bg-[#2f3f6b] text-white w-full p-3 rounded-lg text-lg font-semibold">
+          {form.precio
+            ? `$${Number(form.precio).toLocaleString("es-AR")}`
+            : "$0.00"}
         </div>
       </div>
+
+      <div className="text-sm text-gray-600">
+        Precio por hora: ${precioOriginal.toLocaleString("es-AR")}
+      </div>
+
+      {descuentoAplicado && (
+        <div className="text-green-600 font-medium text-sm mt-1">
+          🎉 Se aplicó un 10% de descuento por ser fin de semana
+        </div>
+      )}
+
+      <p className="text-xs text-gray-500">
+        El precio se calcula automáticamente según el día y horario.
+      </p>
+
+      <button
+        onClick={handleSubmit}
+        className="w-full py-3 rounded-full bg-[#5e4b9c] text-white font-semibold hover:bg-[#4a3b86] transition-all"
+      >
+        IR A PAGAR
+      </button>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function FormTorneoFutbol() {
   });
 
   const searchParams = useSearchParams();
-  const tipoEvento = searchParams.get("tipo") || "futbol";
+  const tipoEvento = searchParams.get("tipo") || "padel";
 
   const { eventos, loading } = useEventosYael();
 
