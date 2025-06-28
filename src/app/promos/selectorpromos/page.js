@@ -19,7 +19,7 @@ export default function SelectorPromos() {
       </div>
 
       <img
-        src="/Assets/yael.png"
+        src="/Assets/logo.jpeg"
         alt="Club Yael"
         className="w-40 h-40 object-contain rounded-full mt-2"
       />

@@ -27,12 +27,12 @@ export default function Home() {
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-start p-4"
-      style={{ backgroundImage: "url('/Assets/admin.jpg')" }} // Reemplazá con tu imagen real
+      style={{ backgroundImage: "url('/Assets/admin.jpg')" }}
     >
       <div className="w-full flex justify-between items-center mb-6 bg-white/80 p-2 rounded shadow">
         <span className="font-semibold text-black">{dateTime}</span>
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-black">club yael (admin)</span>
+          <span className="font-semibold text-black">Club Caruso (admin)</span>
           <button
             onClick={() => {
               localStorage.removeItem("adminUser");
@@ -47,8 +47,8 @@ export default function Home() {
       </div>
 
       <img
-        src="/Assets/yael.png"
-        alt="Club Yael Logo"
+        src="/Assets/logo.jpeg"
+        alt="Club Caruso"
         className="w-32 h-32 rounded-full object-cover mb-8 shadow-md"
       />
 

@@ -26,13 +26,13 @@ export default function FiestaForm() {
   const getDiaSemana = (fechaStr) => {
     if (!fechaStr) return "";
     const dias = [
-      "Domingo",
       "Lunes",
       "Martes",
       "Miércoles",
       "Jueves",
       "Viernes",
       "Sábado",
+      "Domingo",
     ];
     const fecha = new Date(fechaStr);
     return dias[fecha.getDay()];

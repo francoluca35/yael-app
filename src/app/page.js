@@ -38,7 +38,7 @@ export default function Home() {
         {" "}
         {/* Añadimos un ancho máximo al contenedor */}
         <h1 className="text-4xl font-bold text-center drop-shadow-lg uppercase">
-          Hace tu reserva en club yael
+          Hace tu reserva en Caruso FC
         </h1>
         <div className="flex gap-6 w-full md:flex-row sm:flex-col">
           {" "}
