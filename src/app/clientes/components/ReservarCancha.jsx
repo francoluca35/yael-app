@@ -36,7 +36,7 @@ export default function ReservaHorarios() {
 
         <div className="flex justify-center mb-4">
           <Image
-            src="/Assets/yael.png" // Asegurate de tener esta imagen en public/Assets/
+            src="/Assets/logo.jpeg" // Asegurate de tener esta imagen en public/Assets/
             alt="Logo Club Yael"
             width={100}
             height={100}

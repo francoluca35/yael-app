@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { ArrowLeft } from "lucide-react";
+import Swal from "sweetalert2";
 
 export default function FormReserved() {
   const [fecha, setFecha] = useState("");
@@ -75,21 +76,63 @@ export default function FormReserved() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!form.nombre || !form.telefono || !form.formaPago || !form.tipoPago) {
       return alert("Completá todos los campos");
     }
 
+    const formData = {
+      nombre: form.nombre,
+      phone: form.telefono,
+      fecha,
+      hora,
+      tipo,
+    };
+
+    localStorage.setItem("formReserva", JSON.stringify(formData));
+
+    // Si elige efectivo
+    if (form.formaPago === "efectivo") {
+      const id = uuidv4();
+      const estado = "efectivo";
+      const pago = form.tipoPago === "total" ? precio.precio : precio.sena;
+
+      await fetch("/api/reserved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id,
+          ...formData,
+          pago,
+          estado,
+          mp: "efectivo",
+        }),
+      });
+
+      // Mensaje personalizado para WhatsApp
+      const mensaje = `Hola soy ${form.nombre}, reservé cancha de ${tipo}, a las ${hora}, el ${fecha}. Llevo la seña en persona`;
+      const telefonoWhatsApp = "549XXXXXXXXXX"; // ← tu número de WhatsApp con código país sin +
+      const url = `https://wa.me/${telefonoWhatsApp}?text=${encodeURIComponent(
+        mensaje
+      )}`;
+
+      Swal.fire({
+        title: "Reserva confirmada",
+        text: "Ahora te llevamos a WhatsApp para avisar al local",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      setTimeout(() => {
+        window.location.href = url;
+      }, 2000);
+
+      return;
+    }
+
+    // Si elige Mercado Pago
     localStorage.setItem("mpToken", form.formaPago);
-    localStorage.setItem(
-      "formReserva",
-      JSON.stringify({
-        nombre: form.nombre,
-        phone: form.telefono,
-        fecha,
-        hora,
-        tipo,
-      })
-    );
 
     const res = await fetch("/api/mercadopago", {
       method: "POST",
@@ -120,7 +163,7 @@ export default function FormReserved() {
 
         <div className="flex justify-center mb-6">
           <Image
-            src="/Assets/yael.png"
+            src="/Assets/logo.jpeg"
             alt="logo"
             width={100}
             height={100}
@@ -171,9 +214,7 @@ export default function FormReserved() {
               <option className="" value="mercado_pago">
                 Mercado Pago
               </option>
-              <option className="" value="transferencia">
-                Transferencia
-              </option>
+              <option value="efectivo">Efectivo</option>
             </select>
             {/* Flecha hacia abajo */}
             <span className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">

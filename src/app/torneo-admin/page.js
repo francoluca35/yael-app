@@ -18,7 +18,7 @@ export default function Page() {
 
         <div className="mb-4 flex justify-center">
           <img
-            src="/Assets/yael.png"
+            src="/Assets/logo.jpeg"
             alt="Club Yael Logo"
             width={100}
             height={100}
