@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
@@ -31,5 +31,11 @@ export default function ReservaSuccess() {
     }
   }, [searchParams]);
 
-  return <div className="text-white p-8">Procesando reserva...</div>;
+  return (
+    <div className="text-white p-8">
+      <Suspense fallback={<div className="text-white p-4">Cargando...</div>}>
+        Procesando reserva...
+      </Suspense>
+    </div>
+  );
 }
