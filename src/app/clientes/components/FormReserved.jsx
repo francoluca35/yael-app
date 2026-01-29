@@ -163,7 +163,7 @@ export default function FormReserved() {
 
         <div className="flex justify-center mb-6">
           <Image
-            src="/Assets/logo.jpeg"
+            src="/Assets/logo.png"
             alt="logo"
             width={100}
             height={100}

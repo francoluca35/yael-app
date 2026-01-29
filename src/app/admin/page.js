@@ -47,7 +47,7 @@ export default function Home() {
       </div>
 
       <img
-        src="/Assets/logo.jpeg"
+        src="/Assets/logo.png"
         alt="Club Caruso"
         className="w-32 h-32 rounded-full object-cover mb-8 shadow-md"
       />

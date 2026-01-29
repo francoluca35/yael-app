@@ -46,7 +46,7 @@ export default function SelectorHorario() {
 
         <div className="flex justify-center mb-6">
           <Image
-            src="/Assets/logo.jpeg"
+            src="/Assets/logo.png"
             alt="Yael"
             width={100}
             height={100}

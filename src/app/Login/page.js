@@ -40,7 +40,7 @@ export default function Login() {
       {/* Caja de login */}
       <div className="bg-[#0e122b]/60 p-8 rounded-xl w-80 flex flex-col items-center shadow-lg backdrop-blur-sm">
         <img
-          src="/Assets/logo.jpeg"
+          src="/Assets/logo.png"
           alt="Logo Yael"
           className="w-32 mb-4 rounded-full object-cover"
         />
