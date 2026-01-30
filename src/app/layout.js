@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 // app/layout.js
 export const metadata = {
-  title: "Caruso FC",
+  title: "Futbol FC",
   description: "Sistema de reservas de canchas",
   manifest: "/manifest.json",
   icons: {
