@@ -1,19 +1,16 @@
 const withPWA = require('next-pwa')({
-    dest: 'public',
-    disable: process.env.NODE_ENV === "development",
-    register: true,
-    skipWaiting: true,
-  })
-  
-  module.exports = withPWA({
-    reactStrictMode: true,
-    experimental: {
-      appDir: true, 
-    },
-  })
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+  register: true,
+  skipWaiting: true,
+});
 
-  const nextConfig = {
-    reactStrictMode: true,
-    // Otras configs que tengas
-  };
-  module.exports = withPWA(nextConfig);
+const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    appDir: true,
+  },
+  turbopack: {},
+};
+
+module.exports = withPWA(nextConfig);
